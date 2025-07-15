@@ -3,6 +3,8 @@ import  os
 import argparse
 from pathlib import Path
 import requests,zipfile,io
+from utils import walk_through_dir ,plot_random_image ,create_data_loader
+from torchvision import transforms
 
 parser = argparse.ArgumentParser()
 
@@ -36,6 +38,18 @@ if os.path.isdir(data_path):
     else:
         print(f"The data files are present in the folder {data_path} so download will not take place")
 
+train_data_path = data_path/"train"
+test_data_path = data_path/"test"
+
     
+walk_through_dir(data_path)
+plot_random_image(data_path,43,5)
+transform = transforms.Compose(
+    
+)
 
-
+train_data_loader , test_data_loader , classes = create_data_loader(
+    train_data_path,
+    test_data_path,
+    
+)
