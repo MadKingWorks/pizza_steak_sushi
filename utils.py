@@ -81,8 +81,47 @@ def create_data_loader(train_dir:Path,
 
     return train_dataloader,test_dataloader,class_names
 
-   
-    
+def plot_transformed_images(image_paths : list[Path] ,
+                            transform : transforms.Compose ,
+                            n=3,
+                            seed=42):
+    """Function.
 
+    Args:
+        image_paths : List of paths from where images will be selected randomly
+    
+        transform : transformation to be applied before showing the image
+    
+        n : number of images to be plotted
+    
+        seed : random seed to reproduce the results
+
+    Returns:
+        Description : None 
+    """
+
+    random.seed(seed)
+    random_image_paths = random.sample(image_paths ,k=n )
+    for image_path in random_image_paths:
+        with Image.open(image_path) as f:
+            fig , ax = plt.subplots(1,2)
+            ax[0].imshow(f)
+            ax[0].set_title(f"Original \n Size {f.size}")
+            ax[0].axis("off")
+
+            #apply transformation and then plot the image
+            transformed_image = transform(f).permute(1,2,0)    # matplotlib uses color code first
+            ax[1].imshow(transformed_image)
+            ax[1].set_title(f"Transformed Image \n Size : {transformed_image.shape}")
+            ax[1].axis("off")
+
+            fig.suptitle(f" Image Class : {image_path.parent.stem}",fontsize=16)
+            plt.show()
+
+
+            
+        
+
+    
     
     
