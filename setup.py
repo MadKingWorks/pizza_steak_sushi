@@ -3,10 +3,13 @@ import  os
 import argparse
 from pathlib import Path
 import requests,zipfile,io
+import torch
 
 from torch.utils.data import DataLoader, dataset
 from utils import plot_transformed_images, walk_through_dir ,plot_random_image ,create_data_loader
 from torchvision import datasets, transforms
+
+from model_builder import TinyVGG
 
 parser = argparse.ArgumentParser()
 
@@ -90,8 +93,21 @@ test_dataloader = DataLoader(dataset = test_dataset,
                              shuffle=False)
 
 img , label = next(iter(train_data_dataloader))
-
+img_simple,label_simple  = img[0].unsqueeze(dim=0),label[0]
 print(f"Image label : {label} Image shape : {img.shape} -> [batch_size , color_channels,height , width]")
 print(f"Label shape {label.shape}")
 
+
+model_0 = TinyVGG(3,
+                  10,
+                  len(train_dataset.classes),
+                  3,
+                  2,
+                  1)
+
+print(model_0)
+print(f"model output logits are {model_0(img_simple)} ")
+print(f"prediction probabilities are {torch.softmax(model_0(img_simple),dim=1)}")
+print(f"prediction output label is {torch.argmax(torch.softmax(model_0(img_simple),dim=1))}")
+print(f"Original label is {label_simple}")
 
