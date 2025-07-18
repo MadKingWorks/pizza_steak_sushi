@@ -4,6 +4,7 @@ import argparse
 from pathlib import Path
 import requests,zipfile,io
 import torch
+from torchinfo import summary
 
 from torch.utils.data import DataLoader, dataset
 from utils import plot_transformed_images, walk_through_dir ,plot_random_image ,create_data_loader
@@ -111,3 +112,4 @@ print(f"prediction probabilities are {torch.softmax(model_0(img_simple),dim=1)}"
 print(f"prediction output label is {torch.argmax(torch.softmax(model_0(img_simple),dim=1))}")
 print(f"Original label is {label_simple}")
 
+print(summary(model_0,input_size = [1,3,image_size_transformed,image_size_transformed]).encode("utf-8"))
