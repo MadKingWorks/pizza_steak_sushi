@@ -112,4 +112,8 @@ print(f"prediction probabilities are {torch.softmax(model_0(img_simple),dim=1)}"
 print(f"prediction output label is {torch.argmax(torch.softmax(model_0(img_simple),dim=1))}")
 print(f"Original label is {label_simple}")
 
-print(summary(model_0,input_size = [1,3,image_size_transformed,image_size_transformed]).encode("utf-8"))
+#print(summary(model_0,input_size = [1,3,image_size_transformed,image_size_transformed]).encode("utf-8"))
+summary_file = "summary.log"
+with open(summary_file,'w') as f:
+    f.write(summary(model_0,input_size=[1,3,image_size_transformed,image_size_transformed]))
+
