@@ -35,10 +35,8 @@ def train_step(model:torch.nn.Module,
         optimizer.step()
         y_pred_class = torch.argmax(torch.softmax(y_pred,dim=1),dim=1)
         train_acc += (y_pred_class==y).sum().item()/len(y_pred)
-        #print(f"The train acc caculated per batch is  {train_acc}")
-    #print(f"The train loss caculated is {train_loss} and wil now be averaged")
     train_loss = train_loss/len(dataloader)
-    test_acc = train_acc/len(dataloader)
+    train_acc = train_acc/len(dataloader)
     return train_loss, train_acc
 
 def test_step(model:torch.nn.Module,
@@ -67,11 +65,7 @@ def test_step(model:torch.nn.Module,
             loss = loss_fn(test_pred_logits,y)
             test_loss += loss.item()
             test_pred_labels = torch.argmax(test_pred_logits,dim=1)
-        
-        #print(f"Test pred logits calcuated are {test_pred_logits}")
-        #print(f"Test pred labels calcuated are {test_pred_labels} while y is {y}")
             test_acc += (test_pred_labels == y).sum().item()/len(test_pred_labels)
-            #print(f"Test accuracy calculated is {test_acc} per batch")
     test_loss = test_loss/len(dataloader)
     test_acc = test_acc/len(dataloader)
 

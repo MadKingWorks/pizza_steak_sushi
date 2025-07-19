@@ -1,4 +1,4 @@
-call "install_dependencies.bat"
+::call "install_dependencies.bat"
 set cwd=%~dp0%
 echo on
-%python_interpreter% setup.py %cwd% 224 1 0.1 3 > start.log
+%python_interpreter% setup.py %cwd% 224 10 0.1 4 > start.log

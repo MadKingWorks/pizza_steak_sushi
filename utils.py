@@ -1,3 +1,4 @@
+from typing import Dict
 import matplotlib.pyplot as plt
 from pathlib import Path
 import random
@@ -6,7 +7,7 @@ from PIL import Image
 import torch
 from torchvision import datasets,transforms
 from torch.utils.data import DataLoader
-
+from typing import Dict
 
 
 def plot_random_image(data_path : Path,random_seed:int,num:int):
@@ -119,7 +120,38 @@ def plot_transformed_images(image_paths : list[Path] ,
             plt.show()
 
 
-            
+def plot_loss_curves(results ):
+    """Function to plot the loss curves as per inputs
+
+    Args:
+         results :Dict(str,list[float]) a result dictionalry with various data
+
+    Returns:
+        Description.
+    """
+    loss = results["train_loss"]
+    test_loss = results["test_loss"]
+    accuracy = results["train_acc"]
+    test_accuracy = results["test_acc"]
+    epochs = range(len(loss))
+    plt.subplot(1,2,1)
+    plt.plot(epochs,loss,label="train_loss")
+    plt.plot(epochs,test_loss,label="test_loss")
+    plt.title('Loss')
+    plt.xlabel('Epochs')
+    plt.legend()
+    
+    plt.subplot(1,2,2)
+    plt.plot(epochs,accuracy,label="train_acc")
+    plt.plot(epochs,test_accuracy,label="test_acc")
+    plt.title('accuracy')
+    plt.xlabel('Epochs')
+    plt.legend()
+    plt.show()
+    
+    
+       
+    
         
 
     

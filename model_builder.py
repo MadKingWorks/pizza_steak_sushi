@@ -63,6 +63,7 @@ class TinyVGG(nn.Module):
         )
 
     def forward(self,x:torch.Tensor):
+        #print(f"Input tensor shape is {x.shape}")
         return self.classifier(self.conv_block_2(self.conv_block_1(x)))
         
         
