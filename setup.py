@@ -12,6 +12,8 @@ from torchvision import datasets, transforms
 
 from model_builder import TinyVGG
 
+
+device = "cuda" if torch.cuda.is_available() else "cpu"
 parser = argparse.ArgumentParser()
 
 parser.add_argument('cwd')
@@ -114,6 +116,6 @@ print(f"Original label is {label_simple}")
 
 #print(summary(model_0,input_size = [1,3,image_size_transformed,image_size_transformed]).encode("utf-8"))
 summary_file = "summary.log"
-with open(summary_file,'w') as f:
+with open(summary_file,'ear',encoding='utf-8') as f:
     f.write(summary(model_0,input_size=[1,3,image_size_transformed,image_size_transformed]))
 
