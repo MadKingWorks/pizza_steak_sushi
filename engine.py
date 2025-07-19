@@ -3,7 +3,7 @@ import torch
 from torch.cuda import is_available
 from torch.optim import optimizer
 from torch.utils.data import DataLoader
-from setup import device
+#from setup import device
 from tqdm.auto import tqdm
 
 def train_step(model:torch.nn.Module,
@@ -22,6 +22,7 @@ def train_step(model:torch.nn.Module,
     Description.
     """
         
+    device ="cuda" if torch.cuda.is_available() else "cpu"
     model.train()
     train_loss , train_acc = 0,0
     for BATCH , (X,y) in enumerate(dataloader):
@@ -33,8 +34,9 @@ def train_step(model:torch.nn.Module,
         loss.backward()
         optimizer.step()
         y_pred_class = torch.argmax(torch.softmax(y_pred,dim=1),dim=1)
-        train_acc += (y_pred==y).sum().item()/len(y_pred)
-
+        train_acc += (y_pred_class==y).sum().item()/len(y_pred)
+        #print(f"The train acc caculated per batch is  {train_acc}")
+    #print(f"The train loss caculated is {train_loss} and wil now be averaged")
     train_loss = train_loss/len(dataloader)
     test_acc = train_acc/len(dataloader)
     return train_loss, train_acc
@@ -54,19 +56,22 @@ def test_step(model:torch.nn.Module,
     Returns:
         Description.
     """
-
+    device ="cuda" if torch.cuda.is_available() else "cpu"
     model.eval()
     test_loss, test_acc = 0,0
     with torch.inference_mode():
         for Batch , (X,y) in enumerate(dataloader):
             X , y = X.to(device) , y.to(device)
 
-        test_pred_logits = model(X)
-        loss = loss_fn(test_pred_logits,y)
-        test_loss += loss.item()
-        test_pred_labels = test_pred_logits.argmax(dim=1)
-        test_acc += (test_pred_labels == y).sum().item()/len(test_pred_labels)
-
+            test_pred_logits = model(X)
+            loss = loss_fn(test_pred_logits,y)
+            test_loss += loss.item()
+            test_pred_labels = torch.argmax(test_pred_logits,dim=1)
+        
+        #print(f"Test pred logits calcuated are {test_pred_logits}")
+        #print(f"Test pred labels calcuated are {test_pred_labels} while y is {y}")
+            test_acc += (test_pred_labels == y).sum().item()/len(test_pred_labels)
+            #print(f"Test accuracy calculated is {test_acc} per batch")
     test_loss = test_loss/len(dataloader)
     test_acc = test_acc/len(dataloader)
 
@@ -74,10 +79,10 @@ def test_step(model:torch.nn.Module,
     return test_loss,test_acc
 
 
-def train(model:torch.nn.nn.Module ,
+def train(model:torch.nn.Module ,
      train_dataloader : torch.utils.data.DataLoader,
      test_dataloader :torch.utils.data.DataLoader,
-     optimizer : torch.optim.optimizer,
+     optimizer : torch.optim,
      loss_fn:torch.nn.Module = nn.CrossEntropyLoss(),
      epochs : int = 5):
     """train. Trains a Neural Model
@@ -125,7 +130,7 @@ def train(model:torch.nn.nn.Module ,
         results["test_acc"].append(test_acc.item() if isinstance(test_acc,torch.Tensor) else test_acc)
 
 
-        return results
+    return results
 
 
     
