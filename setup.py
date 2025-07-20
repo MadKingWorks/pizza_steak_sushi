@@ -9,7 +9,9 @@ from torch import  nn
 from engine import train
 from torch.utils.data import DataLoader, dataset
 from utils import plot_transformed_images, walk_through_dir ,plot_random_image ,create_data_loader,plot_loss_curves
-from torchvision import datasets, transforms,io
+from torchvision import datasets, transforms
+import io
+import torchvision
 
 from model_builder import TinyVGG
 from timeit import default_timer as timer
@@ -209,7 +211,7 @@ def plot_and_pred_image(model : torch.nn.Module,
         Description.
     """
     import matplotlib.pyplot as plt
-    target_image = io.read_image(str(image_path)).type(torch.float32)
+    target_image = torchvision.io.read_image(str(image_path)).type(torch.float32)
     print(target_image)
     target_image =  target_image/255
     print(target_image)
