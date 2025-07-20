@@ -1,3 +1,10 @@
 {
-  "exclude": ["data/", "**/*.log", "**/*.csv"]
+  "include": ["."],
+    "exclude": ["data/",
+		"**/*.log",
+		"**/*.csv",
+		"**/site-packages",
+		"**/Downloads",
+		"**/program_files",
+  ]
 }
