@@ -1,15 +1,5 @@
 import torch
 from torch import nn
-def function_name(args):
-    """Summary line.
-
-    Args:
-        param1 (type): Description of param1.
-
-    Returns:
-        type: Description of return value.
-    """
-
 class TinyVGG(nn.Module):
     """TinyVGG.
     The model which is same as TinyVGG model
