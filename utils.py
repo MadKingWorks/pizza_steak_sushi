@@ -8,7 +8,7 @@ import torch
 from torchvision import datasets,transforms
 from torch.utils.data import DataLoader
 from typing import Dict
-
+import zipfile
 
 def plot_random_image(data_path : Path,random_seed:int,num:int):
     
@@ -151,6 +151,17 @@ def plot_loss_curves(results ):
     
     
        
+def uncompressfile(filename):
+    """uncompress file at the same location.
+
+    Args:
+        filename(str):filename.
+
+    Returns:
+        True: if thr file got uncompressed successfully else False
+    """
+    with zipfile.ZipFile(filename) as zip_ref:
+        zip_ref.extractall(filename.parent)
     
         
 

@@ -243,9 +243,3 @@ plot_and_pred_image(model=model_0,
                     transform=custom_image_transform,
                     device="cpu"
                     )
-
-    
-    
-    
-
-
