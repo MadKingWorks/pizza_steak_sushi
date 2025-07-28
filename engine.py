@@ -5,7 +5,7 @@ from torch.optim import optimizer
 from torch.utils.data import DataLoader
 #from setup import device
 from tqdm.auto import tqdm
-
+from torch.utils import tensorboard
 def train_step(model:torch.nn.Module,
                dataloader:torch.utils.data.DataLoader,
                loss_fn:torch.nn.Module,
@@ -74,11 +74,14 @@ def test_step(model:torch.nn.Module,
 
 
 def train(model:torch.nn.Module ,
-     train_dataloader : torch.utils.data.DataLoader,
-     test_dataloader :torch.utils.data.DataLoader,
-     optimizer : torch.optim,
-     loss_fn:torch.nn.Module = nn.CrossEntropyLoss(),
-     epochs : int = 5):
+          train_dataloader : torch.utils.data.DataLoader,
+          test_dataloader :torch.utils.data.DataLoader,
+          optimizer : torch.optim,
+          writer : torch.utils.tensorboard.SummaryWriter,
+          loss_fn:torch.nn.Module = nn.CrossEntropyLoss(),
+          epochs : int = 5,):
+          
+          
     """train. Trains a Neural Model
 
     Args:
@@ -86,8 +89,9 @@ def train(model:torch.nn.Module ,
         train_dataloader : torch.utils.data.DataLoader Train data
         test_dataloader : torch.utils.data.DataLoader test data
         optimizer : torch.optim.Optimizer The optimizer used for trainig the modelnn.CrossEntropyLoss()
+        writer : torch.utils.tensorboard.SummaryWriter object
         loss_fn:torch.nn.Module The loss function
-
+        epochs (int): number of epochs 
     Returns:
         .None
     """
@@ -122,7 +126,15 @@ def train(model:torch.nn.Module ,
         results["train_acc"].append(train_acc.item() if isinstance(train_acc,torch.Tensor) else train_acc)
         results["test_loss"].append(test_loss.item() if isinstance(test_loss,torch.Tensor) else test_loss) 
         results["test_acc"].append(test_acc.item() if isinstance(test_acc,torch.Tensor) else test_acc)
-
+        writer.add_scalars(main_tag="Loss",
+                           tag_scalar_dict={"train_loss":train_loss,
+                                            "test_loss":test_loss},
+                           global_step = epoch)
+        writer.add_scalars(main_tag="Accuracy",
+                           tag_scalar_dict = {"train_acc":train_acc,
+                                              "test_acc":test_acc},
+                           global_step=epoch)
+    writer.close()
 
     return results
 

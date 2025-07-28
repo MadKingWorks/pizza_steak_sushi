@@ -164,6 +164,22 @@ def uncompressfile(filename):
         zip_ref.extractall(filename.parent)
     
         
+def set_device():
+    device = "cuda" if torch.cuda.is_available() else "cpu"
+    return device
+def set_seeds(seed = 42):
+    """sets the seeds ; default value is 42
+
+    Args:
+        seed (int): random seed int value.
+
+    Returns:
+        None.
+    """
+
+    torch.manual_seed(seed)
+    torch.cuda.manual_seed(seed)
+    
 
     
     
