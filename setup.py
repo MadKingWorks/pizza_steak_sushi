@@ -1,4 +1,4 @@
-from ntpath import isdir
+#from ntpath import isdir
 import  os
 import argparse
 from pathlib import Path
@@ -161,7 +161,7 @@ print(f"TOTAL TRAINING TIME : {end_time - start_time:.3f} seconds")
 plot_loss_curves(model_0_results)
 
 
-def download_image_from_url(url:str,store_location:Path,image_name:str):
+def download_image_from_url(store_location:Path,image_name:str,url= 'https://raw.githubusercontent.com/mrdbourke/pytorch-deep-learning/main/images/04-pizza-dad.jpeg',):
     """Function. Downloads an image from url in store_location as image_name
 
     Args:
@@ -243,3 +243,42 @@ plot_and_pred_image(model=model_0,
                     transform=custom_image_transform,
                     device="cpu"
                     )
+
+def download_zipfile_from_url(url:str,
+                              storage_location:Path,
+                              unzip : bool,
+                              ):
+    """download a zipped folder from given url and then uncompress it.
+
+    Args:
+        url (str): url from which download need to occur
+        storage (str) : Location where the file needs to be stored
+        unzip (bool) : If true , unzip the file
+
+    Returns:
+        Path : downloaded location
+    """
+
+    if url is not None and storage_location is not None:
+        #proceed with zipfile download
+        try:
+            from requests import request
+            r =  request.get(url=url)
+            with open(storage_location) as f:
+                f.write(r.content)
+        except Exeption as e:
+            print(f"Downaloading zip file returned error as {e}")
+        if unzip == True:
+            from zipfile import ZipFile
+            zip_ref = ZipFile(storage_location)
+            zip_ref.extractall(storage_location.parent)
+
+
+            
+if __name__ == "__main__":
+    path = Path("/home/remote/pizza_steak_sushi/Data")
+    url="https://github.com/mrdbourke/pytorch-deep-learning/raw/refs/heads/main/data/pizza_steak_sushi.zip"
+    download_zipfile_from_url(url,path,True)
+        
+        
+    

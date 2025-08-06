@@ -9,7 +9,20 @@ from torchvision import datasets,transforms
 from torch.utils.data import DataLoader
 from typing import Dict
 import zipfile
+def list_of_path(image_directory:Path):
+    """ returns a list of all the paths of all the images that has jpg extention
 
+    Args:
+        path (Path): Directory containing the images
+
+    Returns:
+        List: List of images
+    """
+
+    list_of_image_paths = list(image_directory.glob("**/*.jpg"))
+    return list_of_image_paths
+
+    
 def plot_random_image(data_path : Path,random_seed:int,num:int):
     
     """Connects to the next available port.
@@ -29,7 +42,8 @@ def plot_random_image(data_path : Path,random_seed:int,num:int):
     #image_list =
     random.seed(random_seed)
     #get a list of all images
-    list_of_image_paths = list(data_path.glob("*/*/*.jpg"))
+    list_of_image_paths = list(data_path.glob("**/*.jpg"))
+    print(f"number of images in this directory are {len(list_of_image_paths)}")
     #select random number of images
     random_path_of_images = random.choice(list_of_image_paths)
     #get image class from directory
@@ -40,14 +54,10 @@ def plot_random_image(data_path : Path,random_seed:int,num:int):
     print(f"Image height is :{img.height}")
     print(f"Image width is :{img.width}")
     img.show()
-    
-    
-    
 
 def walk_through_dir(path):
     for (root,dir,file) in os.walk(path):
         print(f"We have {len(dir)} directories and {len(file)} files at location {root}")
-
 
 def create_data_loader(train_dir:Path,
                        test_dir:Path,
@@ -119,7 +129,6 @@ def plot_transformed_images(image_paths : list[Path] ,
             fig.suptitle(f" Image Class : {image_path.parent.stem}",fontsize=16)
             plt.show()
 
-
 def plot_loss_curves(results ):
     """Function to plot the loss curves as per inputs
 
@@ -148,10 +157,8 @@ def plot_loss_curves(results ):
     plt.xlabel('Epochs')
     plt.legend()
     plt.show()
-    
-    
        
-def uncompressfile(filename):
+def uncompressfile(filename:Path):
     """uncompress file at the same location.
 
     Args:
@@ -162,11 +169,11 @@ def uncompressfile(filename):
     """
     with zipfile.ZipFile(filename) as zip_ref:
         zip_ref.extractall(filename.parent)
-    
         
 def set_device():
     device = "cuda" if torch.cuda.is_available() else "cpu"
     return device
+
 def set_seeds(seed = 42):
     """sets the seeds ; default value is 42
 
@@ -180,7 +187,12 @@ def set_seeds(seed = 42):
     torch.manual_seed(seed)
     torch.cuda.manual_seed(seed)
     
+def download_from_url_and_unzip(url:str,
+                      filename:Path):
+    #from requests import request
+    rf = requests.get(url)
+    with open(filename ,'r') as r:
+        r.write(rf.content)
+    uncompressfile(filename)
 
-    
-    
-    
+
