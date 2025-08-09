@@ -68,3 +68,17 @@ class TinyVGG(nn.Module):
         
         
         
+class VisionTransformed:
+    """The class  replicates a vision transformer
+
+    Attributes:
+        attribute1 (type): Description of attribute1.
+    """
+
+    def __init__(self, params):
+        """Initializes VisionTransformed .
+
+        Args:
+            params (type): Description of params.
+        """
+        

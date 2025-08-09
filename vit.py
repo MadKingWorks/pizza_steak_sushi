@@ -38,6 +38,8 @@ data_loader = create_data_loader(
 )
 
 #plot_random_image(data_path=data_path,
+
+
 #                  random_seed=42,
 #                  num=1)
 
@@ -48,5 +50,13 @@ plot_transformed_images(images,
                         1,
                         43,
                         )
+
+
+PATCH_SIZE=16
+
+number_of_patches = IMG_SIZE * IMG_SIZE / PATCH_SIZE**2
+
+
+print(f"The number of pathches = {number_of_patches}")
 
 
